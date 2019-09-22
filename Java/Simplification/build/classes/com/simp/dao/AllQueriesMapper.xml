@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.simp.dao.AllQueriesDao">
+<!-- 登录 -->
+<select id="getLogin" parameterType="java.util.Map" resultType="com.simp.entity.GetLogin">
+		
+	select 
+		u.u_account as account,
+		u.u_password as psd,
+		m.m_image as pic,
+		m.m_name as `name`,
+		m.m_eamil as `eamil`,
+		m.m_phone as `phone`,
+		m.m_price as `price`
+ 	from sp_user u inner join sp_my m 
+		on u.id = m.uid 
+	where u.u_account = #{account} and u.u_password = #{password}
+		
+</select>
+
+<!-- 添加账号 -->
+<select id="addLogin" parameterType="com.simp.entity.Sp_User">
+	insert into sp_user(u_account,u_password) values(#{account},#{password})
+</select>
+
+<!-- 添加个人信息 -->
+<select id="addMy" parameterType="com.simp.entity.Sp_My">
+	insert into sp_my(uid,m_image,m_nmae,m_eamil,m_phone,m_price) values(#{uid},'',#{name},'',#{phone},'')
+</select>
+
+<!-- 查询全部分类产品 -->
+<select id="getAllClass" resultType="com.simp.entity.Sp_Allclass">
+		select 
+			aid as aid,
+			a_name as aName
+ 		from sp_allclass
+	</select>
+	
+	<select id="getBanner" resultType="com.simp.entity.Sp_Banner">
+		select 
+			bid as bid,
+			b_image as bImage,
+			b_status as bStatus
+ 		from sp_banner
+	</select>
+	<!-- 全部商品 -->
+	<select id="getMainp" resultType="com.simp.entity.Sp_Product">
+		select			
+			pid as pid,
+			p_image as pImage,
+			p_price as pPrice,
+			p_title as pTitle,
+			p_op as pOp,
+			p_brief as pBrief,
+			p_type as pType,
+			p_newprod as pNewprod,
+			qid as qid,
+			aid as aid,
+			p_status as pStatus
+from sp_product
+	</select>
+	<select id="getSelected" resultType="com.simp.entity.Sp_Product">
+		select 
+			pid as pid,
+			p_image as pImage,
+			p_price as pPrice,
+			p_title as pTitle,
+			p_op as pOp,
+			p_brief as pBrief,
+			p_type as pType,
+			p_newprod as pNewprod,
+			qid as qid,
+			aid as aid,
+			p_status as pStatus
+ 		from sp_product where p_selected = 1 limit 4
+	</select>
+	<select id="getNewprod" resultType="com.simp.entity.Sp_Product">
+		select 
+			pid as pid,
+			p_image as pImage,
+			p_price as pPrice,
+			p_title as pTitle,
+			p_op as pOp,
+			p_brief as pBrief,
+			p_type as pType,
+			p_newprod as pNewprod,
+			qid as qid,
+			aid as aid,
+			p_status as pStatus
+ 		from sp_product where p_newprod = #{pNewprod} limit 6
+	</select>
+	<select id="getPtype" resultType="com.simp.entity.Sp_Product">
+		select 
+			pid as pid,
+			p_image as pImage,
+			p_price as pPrice,
+			p_title as pTitle,
+			p_op as pOp,
+			p_brief as pBrief,
+			p_type as pType,
+			p_newprod as pNewprod,
+			qid as qid,
+			aid as aid,
+			p_status as pStatus
+ 		from sp_product where p_type = #{pType} limit 10
+	</select>
+	<select id="getQueryFuzzy" resultType="com.simp.entity.Sp_Product">
+		select 
+			pid as pid,
+			p_image as pImage,
+			p_price as pPrice,
+			p_title as pTitle,
+			p_op as pOp,
+			p_brief as pBrief,
+			p_type as pType,
+			p_newprod as pNewprod,
+			qid as qid,
+			aid as aid,
+			p_status as pStatus
+ 		from sp_product where p_title LIKE concat('%',#{pTitle},'%')
+	</select>
+</mapper>
